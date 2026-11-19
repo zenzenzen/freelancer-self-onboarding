@@ -1,4 +1,4 @@
 interface:
   display_name: "Freelancer Self-Onboarding"
-  short_description: "Set up each client in a separate agent workspace"
-  default_prompt: "Use $freelancer-self-onboarding to onboard a client work email."
+  short_description: "Check client identity and resume work from the folder"
+  default_prompt: "Use $freelancer-self-onboarding to bind this folder to my client work email."

@@ -1,8 +1,0 @@
-*
-!SKILL.md
-!scripts/
-!scripts/*.py
-!references/
-!references/*.md
-!agents/
-!agents/openai.yaml

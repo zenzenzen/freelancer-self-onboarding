@@ -1,19 +1,19 @@
 # Freelancer Self-Onboarding
 
-Give Codex CLI or Claude Code a client-issued work email and the skill asks where you use it, which account the provider displays, and what access the job calls for. It creates a dedicated Docker workspace for that client. Your next engagement starts with the connector names you already know and a fresh set of credentials.
+Give Codex or Claude Code a client folder and a work email. The skill records which account and workspace each connector should use. Before starting a deliverable, the agent reads that folder's identity and checks the connections the task needs.
 
-## Start an onboarding
+For example, suppose the folder expects `alex@northwind.example` and the Google Drive connector reports `alex@southwind.example`. The agent pauses before opening the brief or drafting from it. Once the operator selects the Northwind connection, the agent checks the email and shared drive again and resumes the task.
 
-Clone this repository, open it in Codex CLI or Claude Code, and use one of these prompts. Both project skill directories point to the same source. The operator machine needs Python 3.11+ and a running local Docker Engine on macOS or Linux.
+## Start
+
+Open this repository in Codex CLI or Claude Code and invoke the skill with the path to your client folder. Use either command below. The skill consists of Markdown instructions and templates.
 
 ```text
-Codex: $freelancer-self-onboarding Onboard operator@northwind.example in ~/Clients/northwind.
-Claude Code: /freelancer-self-onboarding Onboard operator@northwind.example in ~/Clients/northwind.
+$freelancer-self-onboarding Set up ~/Clients/northwind for alex@northwind.example.
+/freelancer-self-onboarding Set up ~/Clients/northwind for alex@northwind.example.
 ```
 
-Choose Slack, the Google Workspace products you use, and any additional connector or CRM by name. Claude users also get MetaMVP. The skill writes a private client context at the workspace root, registers selected MCP endpoints, and walks the installed harness through plugin installation, consent and verification. For an unfamiliar connector, it asks for the exact listing. Each connection stays pending until the signed-in account and target workspace match the intake.
-
-To make the skill available from other folders, run the following once from the trusted clone. The links load the onboarding instructions in each CLI. Client credentials are created later in the selected workspace.
+The first form is for Codex and the second is for Claude Code. To make the onboarding command available from other folders, run these commands once from the cloned repository:
 
 ```sh
 mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"
@@ -21,40 +21,19 @@ ln -s "$PWD/skills/freelancer-self-onboarding" "$HOME/.agents/skills/"
 ln -s "$PWD/skills/freelancer-self-onboarding" "$HOME/.claude/skills/"
 ```
 
-## What carries over to the next client
+Choose Slack, the relevant Google products, MetaMVP on Claude, or type the name of another connector or CRM. The skill remembers reusable product names for future intakes. The client folder records the specific account, tenant and access.
 
-| Reused by the freelancer | Specific to each client |
+## What another account reads
+
+| File in the client folder | What it tells the next agent |
 | --- | --- |
-| Generic connector names and which harness can use them | Work email, provider identities, resource IDs and intended permissions |
-| New CRM names typed during intake | Tokens, OAuth sessions, CLI history, plugins and project files |
-| Changes discovered in client MCP settings and plugin lists, after the skill checks the labels | Provider configuration, tenant URLs and connection verification records |
+| `AGENTS.md` and `CLAUDE.md` | Open the same root instructions before starting or resuming work. |
+| `WORKSPACE.md` | Which client and email own the work, the expected account and target for each connector, standing conventions and links to active tasks. |
+| `tasks/<task>.md` | What counts as done, the latest artifact, what has already been delivered and the next action. |
+| `context/YYYY-MM-DD.md` | What changed on that date, who decided it or what supported it, and which task it affects. |
 
-The base catalog lives on your machine. Returning to the skill refreshes it from small name-only receipts. The skill checks unfamiliar aliases before offering them to another client. A client container cannot mount the catalog or open a sibling's workspace through the launcher.
+Open the client folder in a fresh session after switching Claude accounts or moving to Codex. Ask it to resume the relevant task. The agent can recover the work from disk and must verify any live connection it uses. A local-only deliverable requires the matching folder and task. Credentials stay in the harness or provider's normal credential store. The folder supplies an agent-level identity check. The provider enforces access permissions.
 
-## Switch clients
+The layout adapts ICM's context map and task records to this one workflow. Existing task indexes and dated journals can be linked in place. [ICM Architect](https://github.com/RinDig/icm-architect) · [Methodology paper](https://arxiv.org/abs/2603.16021)
 
-Build the image once from this checkout, then launch the workspace created during intake.
-
-```sh
-SKILL="$PWD/skills/freelancer-self-onboarding"
-docker build -t freelancer-self-onboarding:1 "$SKILL"
-python3 "$SKILL/scripts/workspace.py" --base "$HOME/Clients" run northwind claude
-# After ending that session, open another client's fresh Codex session.
-python3 "$SKILL/scripts/workspace.py" --base "$HOME/Clients" run southwind codex
-```
-
-Each launch gets a fresh container on the client's own Docker network. Its work directory and private home persist. The host operator and Docker administrator can access those files. The container can reach provider APIs, and providers enforce their own tenant permissions. Use a client-specific browser profile for consent and a client-approved model identity. Account-wide hosted connectors are disabled by default.
-
-- [Onboarding skill](skills/freelancer-self-onboarding/SKILL.md)
-- [Workspace layout, intake schema and worked example](skills/freelancer-self-onboarding/references/workspace.md)
-- [Provider setup and identity checks](skills/freelancer-self-onboarding/references/connections.md)
-
-## Verify the installation
-
-```sh
-python3 -m unittest discover -s tests -v
-# After building the image, include the live two-client Docker checks.
-TEST_DOCKER=1 python3 -m unittest discover -s tests -v
-```
-
-The tests use synthetic clients. No provider login is needed.
+[Read the onboarding skill](skills/freelancer-self-onboarding/SKILL.md) · [Preview the workspace identity file](skills/freelancer-self-onboarding/assets/WORKSPACE.md)

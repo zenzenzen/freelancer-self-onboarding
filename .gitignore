@@ -1,6 +1,14 @@
-__pycache__/
-*.py[cod]
-.ruff_cache/
+# Keep local client state from earlier releases out of this distribution.
 .freelancer-catalog.sqlite3*
 CLIENT_CONTEXT.json
 .connector-names.json
+private-home/
+
+# Client records belong in the chosen workspace.
+/WORKSPACE.md
+/tasks/
+/context/
+
+__pycache__/
+*.py[cod]
+.ruff_cache/
