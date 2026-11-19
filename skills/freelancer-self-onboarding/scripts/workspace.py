@@ -99,7 +99,7 @@ def initialize(base: Path, key: str, spec: dict[str, Any]) -> Path:
             )
             if (
                 not (registered or recoverable)
-                or json.loads((root / CONTEXT).read_text()) != spec
+                or plan(json.loads((root / CONTEXT).read_text())) != spec
             ):
                 raise ValueError("This workspace is already bound to another intake.")
         else:

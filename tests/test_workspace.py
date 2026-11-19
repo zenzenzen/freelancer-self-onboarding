@@ -181,6 +181,17 @@ class WorkspaceTests(PortfolioCase):
         self.assertIn(("MetaMVP", "claude"), options)
         self.assertEqual([r for r in options if r[0] == "Slack"], [("Slack", "both")])
 
+    def test_resume_with_omitted_optional_catalog_fields(self) -> None:
+        """Apply current defaults without rewriting a previously valid intake."""
+        root = self.make("north")
+        path = root / workspace.CONTEXT
+        prior = json.loads(path.read_text())
+        for item in prior["surfaces"]:
+            item.pop("connector_harness", None)
+        path.write_text(json.dumps(prior))
+        self.assertEqual(self.make("north"), root)
+        self.assertEqual(json.loads(path.read_text()), prior)
+
     def test_concurrent_initialization(self) -> None:
         """Serialize retries against the same workspace."""
         with ThreadPoolExecutor(max_workers=3) as pool:
