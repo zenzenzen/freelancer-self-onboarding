@@ -13,6 +13,14 @@ Claude Code: /freelancer-self-onboarding Onboard operator@northwind.example in ~
 
 Choose Slack, the Google Workspace products you use, and any additional connector or CRM by name. Claude users also get MetaMVP. The skill writes a private client context at the workspace root, registers selected MCP endpoints, and walks the installed harness through plugin installation, consent and verification. For an unfamiliar connector, it asks for the exact listing. Each connection stays pending until the signed-in account and target workspace match the intake.
 
+To make the skill available from other folders, run the following once from the trusted clone. The links load the onboarding instructions in each CLI. Client credentials are created later in the selected workspace.
+
+```sh
+mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"
+ln -s "$PWD/skills/freelancer-self-onboarding" "$HOME/.agents/skills/"
+ln -s "$PWD/skills/freelancer-self-onboarding" "$HOME/.claude/skills/"
+```
+
 ## What carries over to the next client
 
 | Reused by the freelancer | Specific to each client |

@@ -166,6 +166,21 @@ class WorkspaceTests(PortfolioCase):
         with self.assertRaises(ValueError):
             catalog.entry("op@private.example", "both")
 
+    def test_recover_registration_and_recall_across_harnesses(self) -> None:
+        """Repair an interrupted registry commit without changing client files."""
+        root = self.make("north")
+        snapshot = (root / "work/CONNECTIONS.md").read_bytes()
+        with catalog.database(self.base) as db:
+            db.execute("DELETE FROM roots WHERE slug = ?", ("north",))
+        self.make("north")
+        self.assertEqual((root / "work/CONNECTIONS.md").read_bytes(), snapshot)
+        with catalog.database(self.base) as db:
+            catalog.remember(db, "Slack", "codex")
+        options = catalog.inventory(self.base)
+        self.assertIn(("Copper", "both"), options)
+        self.assertIn(("MetaMVP", "claude"), options)
+        self.assertEqual([r for r in options if r[0] == "Slack"], [("Slack", "both")])
+
     def test_concurrent_initialization(self) -> None:
         """Serialize retries against the same workspace."""
         with ThreadPoolExecutor(max_workers=3) as pool:

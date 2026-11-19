@@ -83,6 +83,8 @@ def populate(stage: Path, spec: dict[str, Any]) -> None:
 def initialize(base: Path, key: str, spec: dict[str, Any]) -> Path:
     """Create or resume one workspace and remember explicitly portable labels."""
     root = base / slug(key)
+    binding = hashlib.sha256(os.fsencode(root)).hexdigest()
+    stamp = root / ".freelancer-workspace"
     with database(base) as db:
         if root.is_symlink() or (root / CONTEXT).is_symlink():
             raise ValueError("Workspace and context must be real paths.")
@@ -90,13 +92,22 @@ def initialize(base: Path, key: str, spec: dict[str, Any]) -> Path:
             registered = db.execute(
                 "SELECT 1 FROM roots WHERE slug = ?", (key,)
             ).fetchone()
-            if not registered or json.loads((root / CONTEXT).read_text()) != spec:
+            recoverable = (
+                stamp.is_file()
+                and not stamp.is_symlink()
+                and stamp.read_text() == binding
+            )
+            if (
+                not (registered or recoverable)
+                or json.loads((root / CONTEXT).read_text()) != spec
+            ):
                 raise ValueError("This workspace is already bound to another intake.")
         else:
             with tempfile.TemporaryDirectory(dir=base, prefix=".setup-") as temp:
                 stage = Path(temp) / "new"
                 stage.mkdir(mode=0o700)
                 populate(stage, spec)
+                (stage / stamp.name).write_text(binding)
                 # rename may replace an empty directory. A nonempty target survives.
                 stage.rename(root)
         db.execute("INSERT OR IGNORE INTO roots VALUES (?)", (key,))
