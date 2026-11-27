@@ -1,0 +1,11 @@
+{
+  "workspace_id": "client-b",
+  "principal": "worker-b@example.invalid",
+  "tenant": "tenant-b",
+  "target": "drive-b",
+  "authorized_sources": [
+    "policy.md",
+    "task.md",
+    "brief.md"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "workspace_id": "client-a",
+  "nodes": [
+    {
+      "id": "policy.identity-gate",
+      "kind": "policy",
+      "title": "Verify Client A connector scope before content",
+      "path": "policy.md",
+      "sha256": "f3ec1a13508df0ea6cee77d8a09eef32bf7fb456df8ac72b01084f45cc885fa6",
+      "status": "verified"
+    },
+    {
+      "id": "task.status",
+      "kind": "task",
+      "title": "Prepare Client A synthetic status",
+      "path": "task.md",
+      "sha256": "a3233a0cccf9d15db5581d681d0e52c062f40f9eda5b28b55457d35a11a5a464",
+      "status": "verified"
+    },
+    {
+      "id": "document.brief",
+      "kind": "document",
+      "title": "Client A synthetic brief",
+      "path": "brief.md",
+      "sha256": "df85fce3fc00b1bad06e63c35f2967cfebf032479a897da1ae81d99ee1a52ff4",
+      "status": "verified"
+    }
+  ],
+  "edges": [
+    {
+      "from": "task.status",
+      "to": "policy.identity-gate",
+      "relation": "requires",
+      "evidence": "task.md"
+    },
+    {
+      "from": "task.status",
+      "to": "document.brief",
+      "relation": "supported_by",
+      "evidence": "task.md"
+    }
+  ]
+}

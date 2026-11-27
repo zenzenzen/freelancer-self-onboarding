@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "workspace_id": "fso-pilot",
+  "nodes": [
+    {
+      "id": "policy.connector-scope",
+      "kind": "policy",
+      "title": "Verify connector identity and target before client work",
+      "path": "skills/freelancer-self-onboarding/SKILL.md",
+      "sha256": "15525affa7fd8126ffab6d65c90a475d4ad08164846dbf75e51847288c405ead",
+      "status": "verified"
+    },
+    {
+      "id": "task.synthetic-isolation-pilot",
+      "kind": "task",
+      "title": "Run the synthetic two-client isolation pilot",
+      "path": "PILOT.md",
+      "sha256": "6a66727ad926c8b849bc97e5bf9157c9269ff98def73486a8df319e3be20eb1a",
+      "status": "verified"
+    },
+    {
+      "id": "artifact.identity-guard",
+      "kind": "artifact",
+      "title": "Synthetic connector identity guard",
+      "path": "pilot/guard.py",
+      "sha256": "f0aeda36b316453b3af1ecd829c2ce4d65f444d3f348da54dd14e72d62432289",
+      "status": "verified"
+    },
+    {
+      "id": "gate.synthetic-handoff",
+      "kind": "gate",
+      "title": "Verify identity before client reads and resuming a handoff",
+      "path": "pilot/test_pilot.py",
+      "status": "verified",
+      "sha256": "724524a56d2ccee710779415e0bc2423959954f337dcb54f9f1aaa2ea43dcf73"
+    }
+  ],
+  "edges": [
+    {
+      "from": "task.synthetic-isolation-pilot",
+      "to": "policy.connector-scope",
+      "relation": "requires",
+      "evidence": "PILOT.md"
+    },
+    {
+      "from": "task.synthetic-isolation-pilot",
+      "to": "artifact.identity-guard",
+      "relation": "supported_by",
+      "evidence": "PILOT.md"
+    },
+    {
+      "from": "task.synthetic-isolation-pilot",
+      "to": "gate.synthetic-handoff",
+      "relation": "requires",
+      "evidence": "PILOT.md"
+    },
+    {
+      "from": "gate.synthetic-handoff",
+      "to": "artifact.identity-guard",
+      "relation": "depends_on",
+      "evidence": "pilot/test_pilot.py"
+    }
+  ]
+}
