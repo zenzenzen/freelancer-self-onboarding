@@ -37,3 +37,21 @@ Open the client folder in a fresh session after switching Claude accounts or mov
 The layout adapts ICM's context map and task records to this one workflow. Existing task indexes and dated journals can be linked in place. [ICM Architect](https://github.com/RinDig/icm-architect) · [Methodology paper](https://arxiv.org/abs/2603.16021)
 
 [Read the onboarding skill](skills/freelancer-self-onboarding/SKILL.md) · [Preview the workspace identity file](skills/freelancer-self-onboarding/assets/WORKSPACE.md)
+
+## Synthetic GEM isolation pilot
+
+The local pilot switches between two synthetic clients and resumes each client’s own task. It uses the installed `graph-engineering-magic` executable. [Acceptance tests and scope](PILOT.md)
+
+Validate the repository and compile its pilot task.
+
+```sh
+graph-engineering-magic --workspace . --workspace-id fso-pilot validate
+graph-engineering-magic --workspace . --workspace-id fso-pilot context compile --task "run synthetic isolation pilot" --seed task.synthetic-isolation-pilot --budget 7000
+```
+
+Save and resume a synthetic Client B handoff from the repository root.
+
+```sh
+python3 -m pilot.demo save --workspace fixtures/client-b --intended-root fixtures/client-b --workspace-id client-b --principal worker-b@example.invalid --tenant tenant-b --target drive-b --key demo --request pilot/requests/client-b.json --next-step "Review the synthetic Client B status note."
+python3 -m pilot.demo resume --workspace fixtures/client-b --intended-root fixtures/client-b --workspace-id client-b --principal worker-b@example.invalid --tenant tenant-b --target drive-b --key demo
+```

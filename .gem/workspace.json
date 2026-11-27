@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "workspace_id": "fso-pilot",
+  "sources": [
+    "PILOT.md",
+    "pilot/guard.py",
+    "skills/freelancer-self-onboarding/SKILL.md",
+    "pilot/test_pilot.py"
+  ],
+  "mandatory": [
+    "policy.connector-scope"
+  ]
+}

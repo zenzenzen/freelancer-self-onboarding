@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "workspace_id": "client-b",
+  "sources": [
+    "brief.md",
+    "policy.md",
+    "task.md"
+  ],
+  "mandatory": [
+    "policy.identity-gate"
+  ]
+}
